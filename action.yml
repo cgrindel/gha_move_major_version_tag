@@ -1,0 +1,19 @@
+name: 'Move a Major Version Tag'
+description: 'Move a major version tag (e.g. v1) after a release.'
+
+inputs:
+  release_tag:
+    required: true
+    type: string
+  base_branch:
+    description: The branch being merged to.
+    type: string
+    default: main
+
+runs:
+  using: composite
+  steps:
+    - name: Delete Existing Tag
+      shell: bash
+      run: |
+
