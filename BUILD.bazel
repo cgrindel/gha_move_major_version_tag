@@ -9,8 +9,8 @@ bzl_library(
 )
 
 sh_binary(
-    name = "do_action",
-    srcs = ["do_action.sh"],
+    name = "move_major_version_tag",
+    srcs = ["move_major_version_tag.sh"],
     deps = [
         "@bazel_tools//tools/bash/runfiles",
         "@cgrindel_bazel_starlib//shlib/lib:env",
