@@ -1,0 +1,21 @@
+name: CI for PR Merge
+
+on:
+  pull_request:
+    branches: [ main ]
+  workflow_call:
+
+jobs:
+  ubuntu_build:
+    runs-on: ubuntu-20.04
+    env:
+      CC: clang
+    steps:
+    - uses: actions/checkout@v2
+    - uses: cgrindel/gha_set_up_bazel@v1
+      with:
+        repo_name: gha_move_major_version_tag
+    - name: Test
+      shell: bash
+      run: |
+        bazelisk test //...

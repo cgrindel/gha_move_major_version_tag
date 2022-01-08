@@ -14,4 +14,6 @@ runs:
       env:
         RELEASE_TAG: ${{ inputs.release_tag }}
       run: |
-        bazelisk run //:move_major_version_tag -- --release_tag "${RELEASE_TAG}"
+        bazelisk run //:move_major_version_tag -- \
+          --release_tag "${RELEASE_TAG}" \
+          --repo_dir "${PWD}"

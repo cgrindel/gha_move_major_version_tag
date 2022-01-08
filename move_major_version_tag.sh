@@ -59,6 +59,10 @@ while (("$#")); do
       show_usage
       exit 0
       ;;
+    --repo_dir)
+      repo_dir="${2}"
+      shift 2
+      ;;
     --release_tag)
       release_tag="${2}"
       shift 2
@@ -89,6 +93,8 @@ done
 [[ -z "${release_tag:-}" ]] && usage_error "Expected a version release_tag. (e.g v1.2.3)"
 is_valid_release_tag "${release_tag}" || fail "Invalid version release_tag. Expected it to start with 'v'."
 
+[[ -z "${repo_dir}" ]] && usage_error "Expected a repo_dir."
+
 # MARK - Determine the major version tag.
 
 if [[ -z "${major_ver_tag:-}" ]]; then
@@ -99,9 +105,9 @@ fi
 
 [[ "${release_tag}" == "${major_ver_tag}" ]] && fail "The major version tag is identical to the release tag."
 
-# MARK - Change to the workspace directory
+# MARK - Change to the repository directory
 
-cd "${BUILD_WORKSPACE_DIRECTORY}"
+cd "${repo_dir}"
 
 # MARK - Check for the existence of the major tag.
 
