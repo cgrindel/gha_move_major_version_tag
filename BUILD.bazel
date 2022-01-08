@@ -17,6 +17,5 @@ sh_binary(
         "@cgrindel_bazel_starlib//shlib/lib:env",
         "@cgrindel_bazel_starlib//shlib/lib:fail",
         "@cgrindel_bazel_starlib//shlib/lib:git",
-        "@cgrindel_bazel_starlib//shlib/lib:github",
     ],
 )

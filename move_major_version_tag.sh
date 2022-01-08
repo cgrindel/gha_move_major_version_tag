@@ -28,11 +28,6 @@ git_sh="$(rlocation "${git_sh_location}")" || \
   (echo >&2 "Failed to locate ${git_sh_location}" && exit 1)
 source "${git_sh}"
 
-github_sh_location=cgrindel_bazel_starlib/shlib/lib/github.sh
-github_sh="$(rlocation "${github_sh_location}")" || \
-  (echo >&2 "Failed to locate ${github_sh_location}" && exit 1)
-source "${github_sh}"
-
 # MARK - Check for Required Software
 
 required_software="Both git and Github CLI (gh) are required to run this utility."
@@ -125,8 +120,13 @@ git tag -a -m "Major release tag ${major_ver_tag}." "${major_ver_tag}" "${new_co
 
 # MARK -  Push to remote
 
-push_cmd=( push_git_tag_to_remote "${major_ver_tag}" )
-[[ -z "${remote:-}" ]] || push_cmd+=( "${remote}" )
-echo "Pushing ${major_ver_tag} to ${remote:-origin}."
-"${push_cmd[@]}"
+if [[ "${push_tag}" == true ]]; then
+  push_cmd=( push_git_tag_to_remote "${major_ver_tag}" )
+  [[ -z "${remote:-}" ]] || push_cmd+=( "${remote}" )
+  echo "Pushing ${major_ver_tag} to ${remote:-origin}."
+  "${push_cmd[@]}"
+else
+  echo "Skipping push of ${major_ver_tag} to ${remote:-origin}."
+fi
+
 
