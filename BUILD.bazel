@@ -11,6 +11,7 @@ bzl_library(
 sh_binary(
     name = "move_major_version_tag",
     srcs = ["move_major_version_tag.sh"],
+    visibility = ["//visibility:public"],
     deps = [
         "@bazel_tools//tools/bash/runfiles",
         "@cgrindel_bazel_starlib//shlib/lib:env",

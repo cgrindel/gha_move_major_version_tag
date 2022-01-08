@@ -1,0 +1,11 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("@bazel_skylib//rules:build_test.bzl", "build_test")
+
+bzlformat_pkg(name = "bzlformat")
+
+build_test(
+    name = "build_test",
+    targets = [
+        "//:move_major_version_tag",
+    ],
+)
