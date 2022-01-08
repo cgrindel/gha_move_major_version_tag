@@ -1,5 +1,106 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
+# --- begin runfiles.bash initialization v2 ---
+# Copy-pasted from the Bazel Bash runfiles library v2.
+set -uo pipefail; f=bazel_tools/tools/bash/runfiles/runfiles.bash
+source "${RUNFILES_DIR:-/dev/null}/$f" 2>/dev/null || \
+  source "$(grep -sm1 "^$f " "${RUNFILES_MANIFEST_FILE:-/dev/null}" | cut -f2- -d' ')" 2>/dev/null || \
+  source "$0.runfiles/$f" 2>/dev/null || \
+  source "$(grep -sm1 "^$f " "$0.runfiles_manifest" | cut -f2- -d' ')" 2>/dev/null || \
+  source "$(grep -sm1 "^$f " "$0.exe.runfiles_manifest" | cut -f2- -d' ')" 2>/dev/null || \
+  { echo>&2 "ERROR: cannot find $f"; exit 1; }; f=; set -e
+# --- end runfiles.bash initialization v2 ---
 
+# MARK - Locate Deps
 
+fail_sh_location=cgrindel_bazel_starlib/shlib/lib/fail.sh
+fail_sh="$(rlocation "${fail_sh_location}")" || \
+  (echo >&2 "Failed to locate ${fail_sh_location}" && exit 1)
+source "${fail_sh}"
+
+env_sh_location=cgrindel_bazel_starlib/shlib/lib/env.sh
+env_sh="$(rlocation "${env_sh_location}")" || \
+  (echo >&2 "Failed to locate ${env_sh_location}" && exit 1)
+source "${env_sh}"
+
+git_sh_location=cgrindel_bazel_starlib/shlib/lib/git.sh
+git_sh="$(rlocation "${git_sh_location}")" || \
+  (echo >&2 "Failed to locate ${git_sh_location}" && exit 1)
+source "${git_sh}"
+
+github_sh_location=cgrindel_bazel_starlib/shlib/lib/github.sh
+github_sh="$(rlocation "${github_sh_location}")" || \
+  (echo >&2 "Failed to locate ${github_sh_location}" && exit 1)
+source "${github_sh}"
+
+# MARK - Check for Required Software
+
+required_software="Both git and Github CLI (gh) are required to run this utility."
+is_installed gh || fail "Could not find Github CLI (gh)." "${required_software}"
+is_installed git || fail "Could not find git." "${required_software}"
+
+# MARK - Process Flags
+
+get_usage() {
+  local utility="$(basename "${BASH_SOURCE[0]}")"
+  echo "$(cat <<-EOF
+Create or move a major version release release_tag.
+
+Usage:
+${utility} [--remote <remote>] [--branch <branch>] <release_tag>
+EOF
+  )"
+}
+
+args=()
+while (("$#")); do
+  case "${1}" in
+    "--help")
+      show_usage
+      exit 0
+      ;;
+    --release_tag)
+      release_tag="${2}"
+      shift 2
+      ;;
+    --major_ver_tag)
+      major_ver_tag="${2}"
+      shift 2
+      ;;
+    --remote)
+      remote="${2}"
+      shift 2
+      ;;
+    --branch)
+      main_branch="${2}"
+      shift 2
+      ;;
+    --reset_tag)
+      reset_tag=true
+      shift 1
+      ;;
+    *)
+      args+=("${1}")
+      shift 1
+      ;;
+  esac
+done
+
+[[ -z "${release_tag:-}" ]] && usage_error "Expected a version release_tag. (e.g v1.2.3)"
+is_valid_release_tag "${release_tag}" || fail "Invalid version release_tag. Expected it to start with 'v'."
+
+# MARK - Determine the major version tag.
+
+if [[ -z "${major_ver_tag:-}" ]]; then
+  # Searches for the first period and selects everything before it.
+  # If there is no period, the whole thing is selected.
+  major_ver_tag="${release_tag%%.*}"
+fi
+
+[[ "${release_tag}" == "${major_ver_tag}" ]] && fail "The major version tag is identical to the release tag."
+
+# MARK - Change to the workspace directory
+
+cd "${BUILD_WORKSPACE_DIRECTORY}"
+
+# MARK - Check for the existence of the major tag.

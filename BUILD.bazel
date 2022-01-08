@@ -7,3 +7,15 @@ bzl_library(
     name = "deps",
     srcs = ["deps.bzl"],
 )
+
+sh_binary(
+    name = "do_action",
+    srcs = ["do_action.sh"],
+    deps = [
+        "@bazel_tools//tools/bash/runfiles",
+        "@cgrindel_bazel_starlib//shlib/lib:env",
+        "@cgrindel_bazel_starlib//shlib/lib:fail",
+        "@cgrindel_bazel_starlib//shlib/lib:git",
+        "@cgrindel_bazel_starlib//shlib/lib:github",
+    ],
+)
