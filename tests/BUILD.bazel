@@ -9,3 +9,15 @@ build_test(
         "//:move_major_version_tag",
     ],
 )
+
+sh_test(
+    name = "move_major_version_tag_test",
+    srcs = ["move_major_version_tag_test.sh"],
+    data = [
+        "//:move_major_version_tag",
+    ],
+    deps = [
+        "@bazel_tools//tools/bash/runfiles",
+        "@cgrindel_bazel_starlib//shlib/lib:assertions",
+    ],
+)
