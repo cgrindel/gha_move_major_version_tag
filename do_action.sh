@@ -104,3 +104,23 @@ fi
 cd "${BUILD_WORKSPACE_DIRECTORY}"
 
 # MARK - Check for the existence of the major tag.
+
+if git_tag_exists "${major_ver_tag}"; then
+  orig_commit="$(get_git_commit_hash "${major_ver_tag}")"
+  echo "Removing ${major_ver_tag} at ${orig_commit}."
+  delete_git_tag "${major_ver_tag}"
+fi
+
+# MARK - Create the major version tag with the new commit
+
+new_commit="$(get_git_commit_hash "${release_tag}")"
+echo "Creating ${major_ver_tag} at ${new_commit}." 
+git tag -a -m "Major release tag ${major_ver_tag}." "${major_ver_tag}" "${new_commit}"
+
+# MARK -  Push to remote
+
+push_cmd=( push_git_tag_to_remote "${major_ver_tag}" )
+[[ -z "${remote:-}" ]] || push_cmd+=( "${remote}" )
+echo "Pushing ${major_ver_tag} to ${remote:-origin}."
+"${push_cmd[@]}"
+
