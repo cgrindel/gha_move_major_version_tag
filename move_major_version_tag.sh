@@ -47,10 +47,14 @@ get_usage() {
 Create or move a major version release release_tag.
 
 Usage:
-${utility} [--remote <remote>] [--branch <branch>] <release_tag>
+${utility} [--remote <remote>] [--major_ver_tag <major_ver_tag>] [--no_push_tag] 
+           --release_tag <release_tag> 
+           --repo_dir <repository_directory>
 EOF
   )"
 }
+
+push_tag=true
 
 args=()
 while (("$#")); do
@@ -71,17 +75,13 @@ while (("$#")); do
       major_ver_tag="${2}"
       shift 2
       ;;
+    --no_push_tag)
+      push_tag=false
+      shift 1
+      ;;
     --remote)
       remote="${2}"
       shift 2
-      ;;
-    --branch)
-      main_branch="${2}"
-      shift 2
-      ;;
-    --reset_tag)
-      reset_tag=true
-      shift 1
       ;;
     *)
       args+=("${1}")
