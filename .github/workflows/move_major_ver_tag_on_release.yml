@@ -3,12 +3,31 @@ name: Move Major Version Tag on Release
 on:
   release:
     types: [ published ]
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        required: true
+        type: string
 
 jobs:
   move_major_version_tag:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
+      - name: Resolve release_tag
+        id: resolve_release_tag
+        shell: bash
+        env:
+          VALUE0: ${{ github.event.release.tag_name }}
+          VALUE1: ${{ github.event.inputs.release_tag }}
+        run: |
+          values=( "$VALUE0" "$VALUE1" "$VALUE2" )
+          for value in "$values[@]"; do
+            [[ ! -z "$value" ]] && \
+              echo "::set-output name=resolved_value::${value}" && \
+              break
+          done
+
       - uses: ./
         with:
-          release_tag: ${{ github.event.release.tag_name }}
+          release_tag: ${{ steps.resolve_release_tag.outputs.resolved_value }}
