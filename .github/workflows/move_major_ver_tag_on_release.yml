@@ -8,6 +8,7 @@ jobs:
   move_major_version_tag:
     runs-on: ubuntu-20.04
     steps:
+      - uses: actions/checkout@v2
       - uses: ./
         with:
           release_tag: ${{ github.event.release.tag_name }}
