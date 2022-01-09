@@ -85,6 +85,10 @@ while (("$#")); do
   esac
 done
 
+# DEBUG BEGIN
+set -x
+# DEBUG END
+
 [[ -z "${release_tag:-}" ]] && usage_error "Expected a version release_tag. (e.g v1.2.3)"
 is_valid_release_tag "${release_tag}" || fail "Invalid version release_tag. Expected it to start with 'v'."
 
