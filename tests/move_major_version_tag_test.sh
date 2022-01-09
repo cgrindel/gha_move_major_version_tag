@@ -58,19 +58,44 @@ git commit -a -m "Commit foo.txt"
 
 # MARK - Test no previous major tag
 
+initial_major_ver_tag="v998"
 initial_release_tag="v998.0.0"
-expected_major_tag="v998"
 create_git_release_tag "${initial_release_tag}"
 do_move "${initial_release_tag}"
-git_tag_exists "${expected_major_tag}" || fail "Expected ${expected_major_tag} to exist."
-release_commit="$(get_git_commit_hash "${initial_release_tag}")"
-major_tag_commit="$(get_git_commit_hash "${expected_major_tag}")"
-assert_equal "${release_commit}" "${major_tag_commit}" "Commits should match."
+git_tag_exists "${initial_major_ver_tag}" || fail "Expected ${initial_major_ver_tag} to exist."
+initial_release_commit="$(get_git_commit_hash "${initial_release_tag}")"
+initial_major_ver_tag_commit="$(get_git_commit_hash "${initial_major_ver_tag}")"
+assert_equal "${initial_release_commit}" "${initial_major_ver_tag_commit}" "Commits should match."
 
 
 # MARK - Test with previous major tag
 
-# echo "More text." >> "${foo_path}"
-# git commit -a -m "Commit foo.txt"
+echo "More text." >> "${foo_path}"
+git commit -a -m "Commit more text."
 
-fail "IMPLEMENT ME!"
+patch_release_tag="v998.0.1"
+create_git_release_tag "${patch_release_tag}"
+do_move "${patch_release_tag}"
+git_tag_exists "${initial_major_ver_tag}" || fail "Expected ${initial_major_ver_tag} to exist."
+patch_release_commit="$(get_git_commit_hash "${patch_release_tag}")"
+initial_major_ver_tag_commit="$(get_git_commit_hash "${initial_major_ver_tag}")"
+assert_equal "${patch_release_commit}" "${initial_major_ver_tag_commit}" \
+  "Commits should match after patch release."
+
+
+# MARK - Test Major Version Release
+
+new_major_ver_tag="v999"
+new_major_release_tag="v999.0.0"
+create_git_release_tag "${new_major_release_tag}"
+do_move "${new_major_release_tag}"
+git_tag_exists "${new_major_ver_tag}" || fail "Expected ${new_major_ver_tag} to exist."
+new_major_release_commit="$(get_git_commit_hash "${new_major_release_tag}")"
+new_major_ver_tag_commit="$(get_git_commit_hash "${new_major_ver_tag}")"
+assert_equal "${new_major_release_commit}" "${new_major_ver_tag_commit}" \
+  "Commits should match after major release."
+
+# Make sure that the initial major ver tag still points to patch release.
+initial_major_ver_tag_commit="$(get_git_commit_hash "${initial_major_ver_tag}")"
+assert_equal "${patch_release_commit}" "${initial_major_ver_tag_commit}" \
+  "Initial major version tag commit should not have changed."
