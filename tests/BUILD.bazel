@@ -1,0 +1,24 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("@bazel_skylib//rules:build_test.bzl", "build_test")
+
+bzlformat_pkg(name = "bzlformat")
+
+build_test(
+    name = "build_test",
+    targets = [
+        "//:move_major_version_tag",
+    ],
+)
+
+sh_test(
+    name = "move_major_version_tag_test",
+    srcs = ["move_major_version_tag_test.sh"],
+    data = [
+        "//:move_major_version_tag",
+    ],
+    deps = [
+        "@bazel_tools//tools/bash/runfiles",
+        "@cgrindel_bazel_starlib//shlib/lib:assertions",
+        "@cgrindel_bazel_starlib//shlib/lib:git",
+    ],
+)

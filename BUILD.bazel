@@ -1,0 +1,21 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+
+bzlformat_pkg(name = "bzlformat")
+
+bzl_library(
+    name = "deps",
+    srcs = ["deps.bzl"],
+)
+
+sh_binary(
+    name = "move_major_version_tag",
+    srcs = ["move_major_version_tag.sh"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "@bazel_tools//tools/bash/runfiles",
+        "@cgrindel_bazel_starlib//shlib/lib:env",
+        "@cgrindel_bazel_starlib//shlib/lib:fail",
+        "@cgrindel_bazel_starlib//shlib/lib:git",
+    ],
+)
