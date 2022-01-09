@@ -17,6 +17,8 @@ jobs:
         with:
           # Fetch all history for all branches and tags
           fetch-depth: 0
+      - uses: cgrindel/gha_configure_git_user@v1
+
       - name: DEBUG
         shell: bash
         run: |
