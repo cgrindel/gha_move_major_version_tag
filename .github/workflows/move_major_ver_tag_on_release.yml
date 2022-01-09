@@ -14,6 +14,11 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
+        with:
+          # Fetch all history for all branches and tags
+          fetch-depth: 0
+      - uses: cgrindel/gha_configure_git_user@v1
+
       - name: Resolve release_tag
         id: resolve_release_tag
         shell: bash
@@ -21,9 +26,9 @@ jobs:
           VALUE0: ${{ github.event.release.tag_name }}
           VALUE1: ${{ github.event.inputs.release_tag }}
         run: |
-          values=( "$VALUE0" "$VALUE1" "$VALUE2" )
-          for value in "$values[@]"; do
-            [[ ! -z "$value" ]] && \
+          values=( "${VALUE0}" "${VALUE1}" "${VALUE2}" )
+          for value in "${values[@]}"; do
+            [[ ! -z "${value}" ]] && \
               echo "::set-output name=resolved_value::${value}" && \
               break
           done
