@@ -9,6 +9,13 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: DEBUG
+      shell: bash
+      run: |
+        set -x
+        echo "PWD: ${PWD}"
+        tree
+
     - name: Move the major version tag
       shell: bash
       env:
