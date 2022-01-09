@@ -21,9 +21,9 @@ jobs:
           VALUE0: ${{ github.event.release.tag_name }}
           VALUE1: ${{ github.event.inputs.release_tag }}
         run: |
-          values=( "$VALUE0" "$VALUE1" "$VALUE2" )
-          for value in "$values[@]"; do
-            [[ ! -z "$value" ]] && \
+          values=( "${VALUE0}" "${VALUE1}" "${VALUE2}" )
+          for value in "${values[@]}"; do
+            [[ ! -z "${value}" ]] && \
               echo "::set-output name=resolved_value::${value}" && \
               break
           done
