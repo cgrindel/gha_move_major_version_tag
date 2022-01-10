@@ -32,7 +32,9 @@ jobs:
     steps:
 
       # Checks out the code from your repository with all history for all 
-      # branches and tags.
+      # branches and tags. This is important if the workflow is launched via
+      # workspace_dispatch event. It ensures that we can find the release tag
+      # and the major version tag.
       - uses: actions/checkout@v2
         with:
           # Fetch all history for all branches and tags
