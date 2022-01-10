@@ -49,7 +49,7 @@ jobs:
       # and outputs it as `selected_value`.
       - name: Resolve release_tag
         id: resolve_release_tag
-        uses: ./
+        uses: cgrindel/gha_select_value@v1
         with: 
           value0: ${{ github.event.release.tag_name }}
           value1: ${{ github.event.inputs.release_tag }}
