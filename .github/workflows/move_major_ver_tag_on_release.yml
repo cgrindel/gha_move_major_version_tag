@@ -34,5 +34,6 @@ jobs:
           done
 
       - uses: ./
+        name: Move Major Version Release Tag
         with:
           release_tag: ${{ steps.resolve_release_tag.outputs.resolved_value }}
