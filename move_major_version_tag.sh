@@ -124,7 +124,7 @@ git tag -a -m "Major release tag ${major_ver_tag}." "${major_ver_tag}" "${new_co
 # MARK -  Push to remote
 
 if [[ "${push_tag}" == true ]]; then
-  echo "Pushing ${major_ver_tag} to ${remote}."
+  cho "Pushing ${major_ver_tag} to ${remote}."
   push_git_tag_to_remote "${major_ver_tag}" "${remote}"
 else
   echo "Skipping push of ${major_ver_tag} to ${remote:-origin}."

@@ -13,27 +13,30 @@ jobs:
   move_major_version_tag:
     runs-on: ubuntu-20.04
     steps:
+
+      - uses: cgrindel/gha_select_value@v1
+        name: Resolve Release Tag
+        id: resolve_release_tag
+        with:
+          value0: ${{ github.event.release.tag_name }}
+          value1: ${{ github.event.inputs.release_tag }}
+
+      - uses: cgrindel/gha_select_value@v1
+        name: Resolve Checkout Ref
+        id: resolve_checkout_ref
+        with:
+          value0: ${{ github.ref }}
+          value1: v1
+
       - uses: actions/checkout@v2
         with:
           # Fetch all history for all branches and tags
           fetch-depth: 0
-      - uses: cgrindel/gha_configure_git_user@v1
 
-      - name: Resolve release_tag
-        id: resolve_release_tag
-        shell: bash
-        env:
-          VALUE0: ${{ github.event.release.tag_name }}
-          VALUE1: ${{ github.event.inputs.release_tag }}
-        run: |
-          values=( "${VALUE0}" "${VALUE1}" "${VALUE2}" )
-          for value in "${values[@]}"; do
-            [[ ! -z "${value}" ]] && \
-              echo "::set-output name=resolved_value::${value}" && \
-              break
-          done
+      - uses: cgrindel/gha_configure_git_user@v1
 
       - uses: ./
         name: Move Major Version Release Tag
         with:
           release_tag: ${{ steps.resolve_release_tag.outputs.resolved_value }}
+          checkout_ref: ${{ steps.resolve_checkout_ref.outputs.resolved_value }}
