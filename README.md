@@ -61,5 +61,6 @@ jobs:
 
 ```
 
-This workflow will run when a new release is published or if the workflow is launched via a
-`workflow_dispatch` event. 
+This workflow will run when a new release is published or if the workflow is [launched via a
+`workflow_dispatch`
+event](https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow). 
