@@ -13,7 +13,9 @@ runs:
       shell: bash
       run: |
         set -x
+        echo "GITHUB_WORKSPACE: ${GITHUB_WORKSPACE:-}"
         echo "PWD: ${PWD}"
+        cat README.md
         tree
 
     - name: Move the major version tag
