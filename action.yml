@@ -14,7 +14,7 @@ runs:
         repository: cgrindel/gha_move_major_version_tag
         # FIX ME
         ref: debug_other_repo_using_action
-        path: gha_move_major_version_tag
+        path: .github/actions/gha_move_major_version_tag
 
     - name: DEBUG
       shell: bash
@@ -30,6 +30,8 @@ runs:
       env:
         RELEASE_TAG: ${{ inputs.release_tag }}
       run: |
+        repo_dir="${PWD}"
+        cd .github/actions/gha_move_major_version_tag
         bazelisk run //:move_major_version_tag -- \
           --release_tag "${RELEASE_TAG}" \
-          --repo_dir "${PWD}"
+          --repo_dir "${repo_dir}"
