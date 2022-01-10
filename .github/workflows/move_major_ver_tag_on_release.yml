@@ -38,5 +38,5 @@ jobs:
       - uses: ./
         name: Move Major Version Release Tag
         with:
-          release_tag: ${{ steps.resolve_release_tag.outputs.resolved_value }}
-          checkout_ref: ${{ steps.resolve_checkout_ref.outputs.resolved_value }}
+          release_tag: ${{ steps.resolve_release_tag.outputs.selected_value }}
+          checkout_ref: ${{ steps.resolve_checkout_ref.outputs.selected_value }}
