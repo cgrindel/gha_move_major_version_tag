@@ -5,15 +5,30 @@ inputs:
   release_tag:
     required: true
     type: string
+  checkout_ref:
+    type: string
+    default: v1
+  checkout_path:
+    type: string
+    default: .github/actions/gha_move_major_version_tag
 
 runs:
   using: composite
   steps:
+    - uses: actions/checkout@v2
+      with:
+        repository: cgrindel/gha_move_major_version_tag
+        ref: ${{ inputs.checkout_ref }}
+        path: ${{ inputs.checkout_path }}
+
     - name: Move the major version tag
       shell: bash
       env:
         RELEASE_TAG: ${{ inputs.release_tag }}
+        GHA_MOVE_MAJOR_VERSION_TAG_PATH: ${{ inputs.checkout_path }}
       run: |
+        repo_dir="${PWD}"
+        cd "${GHA_MOVE_MAJOR_VERSION_TAG_PATH}"
         bazelisk run //:move_major_version_tag -- \
           --release_tag "${RELEASE_TAG}" \
-          --repo_dir "${PWD}"
+          --repo_dir "${repo_dir}"
