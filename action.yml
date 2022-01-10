@@ -25,9 +25,10 @@ runs:
       shell: bash
       env:
         RELEASE_TAG: ${{ inputs.release_tag }}
+        GHA_MOVE_MAJOR_VERSION_TAG_PATH: ${{ inputs.checkout_path }}
       run: |
         repo_dir="${PWD}"
-        cd .github/actions/gha_move_major_version_tag
+        cd "${GHA_MOVE_MAJOR_VERSION_TAG_PATH}"
         bazelisk run //:move_major_version_tag -- \
           --release_tag "${RELEASE_TAG}" \
           --repo_dir "${repo_dir}"
