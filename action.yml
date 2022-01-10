@@ -5,6 +5,12 @@ inputs:
   release_tag:
     required: true
     type: string
+  checkout_ref:
+    type: string
+    default: v1
+  checkout_path:
+    type: string
+    default: .github/actions/gha_move_major_version_tag
 
 runs:
   using: composite
@@ -12,18 +18,8 @@ runs:
     - uses: actions/checkout@v2
       with:
         repository: cgrindel/gha_move_major_version_tag
-        # FIX ME
-        ref: debug_other_repo_using_action
-        path: .github/actions/gha_move_major_version_tag
-
-    - name: DEBUG
-      shell: bash
-      run: |
-        set -x
-        echo "GITHUB_WORKSPACE: ${GITHUB_WORKSPACE:-}"
-        echo "PWD: ${PWD}"
-        cat README.md
-        tree
+        ref: ${{ inputs.checkout_ref }}
+        path: ${{ inputs.checkout_path }}
 
     - name: Move the major version tag
       shell: bash
