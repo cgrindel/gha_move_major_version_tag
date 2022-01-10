@@ -106,11 +106,14 @@ cd "${repo_dir}"
 
 # MARK - Check for the existence of the major tag.
 
-if git_tag_exists "${major_ver_tag}"; then
-  orig_commit="$(get_git_commit_hash "${major_ver_tag}")"
-  echo "Removing ${major_ver_tag} at ${orig_commit}."
+git_tag_exists "${major_ver_tag}" && \
+  orig_commit="$(get_git_commit_hash "${major_ver_tag}")" && \
+  echo "Removing ${major_ver_tag} at ${orig_commit}, locally." && \
   delete_git_tag "${major_ver_tag}"
-fi
+[[ "${push_tag}" == true  ]] && \
+  git_tag_exists_on_remote "${major_ver_tag}" "${remote}" && \
+  echo "Removing ${major_ver_tag} on ${remote}." && \
+  delete_git_tag_on_remote "${major_ver_tag}" "${remote}"
 
 # MARK - Create the major version tag with the new commit
 
@@ -121,10 +124,8 @@ git tag -a -m "Major release tag ${major_ver_tag}." "${major_ver_tag}" "${new_co
 # MARK -  Push to remote
 
 if [[ "${push_tag}" == true ]]; then
-  push_cmd=( push_git_tag_to_remote "${major_ver_tag}" )
-  [[ -z "${remote:-}" ]] || push_cmd+=( "${remote}" )
-  echo "Pushing ${major_ver_tag} to ${remote:-origin}."
-  "${push_cmd[@]}"
+  echo "Pushing ${major_ver_tag} to ${remote}."
+  push_git_tag_to_remote "${major_ver_tag}" "${remote}"
 else
   echo "Skipping push of ${major_ver_tag} to ${remote:-origin}."
 fi
