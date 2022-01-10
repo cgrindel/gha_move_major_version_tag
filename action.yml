@@ -9,6 +9,13 @@ inputs:
 runs:
   using: composite
   steps:
+    - uses: actions/checkout@v2
+      with:
+        repository: cgrindel/gha_move_major_version_tag
+        # FIX ME
+        ref: debug_other_repo_using_action
+        path: gha_move_major_version_tag
+
     - name: DEBUG
       shell: bash
       run: |
