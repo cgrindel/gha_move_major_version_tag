@@ -1,3 +1,5 @@
+"""Dependencies for gha_move_major_version_tag."""
+
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
 
@@ -15,9 +17,9 @@ def gha_move_major_version_tag_dependencies():
 
     http_archive(
         name = "cgrindel_bazel_starlib",
-        sha256 = "5b36e7f11bf0c1d52480f1b022430611b402b5424979f280f13c52550de76584",
-        strip_prefix = "bazel-starlib-0.3.0",
+        sha256 = "dbc0cedf19e560ac9763a4dd60e1b7ab981692f9b647c03f5340bc64d8032a80",
+        strip_prefix = "bazel-starlib-0.6.1",
         urls = [
-            "http://github.com/cgrindel/bazel-starlib/archive/v0.3.0.tar.gz",
+            "http://github.com/cgrindel/bazel-starlib/archive/v0.6.1.tar.gz",
         ],
     )
