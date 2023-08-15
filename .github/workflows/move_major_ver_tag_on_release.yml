@@ -11,7 +11,7 @@ on:
 
 jobs:
   move_major_version_tag:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
 
       - uses: cgrindel/gha_select_value@v1
