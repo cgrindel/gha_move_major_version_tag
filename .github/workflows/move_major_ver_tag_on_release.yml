@@ -28,7 +28,7 @@ jobs:
           value0: ${{ github.ref }}
           value1: v1
 
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4
         with:
           # Fetch all history for all branches and tags
           fetch-depth: 0
