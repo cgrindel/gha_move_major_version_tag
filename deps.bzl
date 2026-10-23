@@ -17,9 +17,9 @@ def gha_move_major_version_tag_dependencies():
 
     http_archive(
         name = "cgrindel_bazel_starlib",
-        sha256 = "b97a9121843b9f51ddadc909eb9cfdc38c7f7892d707c1245a9a134e827abfb2",
-        strip_prefix = "bazel-starlib-0.21.0",
+        sha256 = "7e4590e30e9968a72875397bbc796adfe6547602d2c8947c6f1613c66fcb7140",
+        strip_prefix = "bazel-starlib-0.30.0",
         urls = [
-            "http://github.com/cgrindel/bazel-starlib/archive/v0.21.0.tar.gz",
+            "http://github.com/cgrindel/bazel-starlib/archive/v0.30.0.tar.gz",
         ],
     )
